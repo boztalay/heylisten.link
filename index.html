@@ -9,17 +9,14 @@
 		function calcTreasureCloseness() {
 			var player = document.getElementById("player");
 			var chest1 = document.getElementById("chest1");
-			var chest2 = document.getElementById("chest2");
-			var treasureCloseness = Math.min(Math.abs(parseInt(player.style.left) - parseInt(chest1.style.left)),
-							 Math.abs(parseInt(player.style.left) - parseInt(chest2.style.right)));
-			 return treasureCloseness / window.innerWidth / 2.0;
+			var treasureCloseness = Math.abs(parseInt(player.style.left) - parseInt(chest1.style.left));
+			return treasureCloseness / window.innerWidth;
 		}
 
 		function resetHeyListen() {
 			var treasureCloseness = calcTreasureCloseness();
 
 			heyListenCount = Math.round(35 * treasureCloseness) + 1;
-			console.log(heyListenCount);
 
 			heyListenTimeout = 300 / treasureCloseness;
 			isHeyListening = true;
@@ -29,8 +26,10 @@
 		function heyListen() {
 			heyListenCount--;
 			if(heyListenCount < 0) {
-				resetHeyListen();			
-				
+				resetHeyListen();
+
+				new Audio("hey_listen.mp3").play();				
+
 				var treasureCloseness = calcTreasureCloseness();
 				var naviCount = (Math.round(Math.random() * 3) / treasureCloseness) + 2;
 				for(var i = 0; i < naviCount; i++) {
@@ -52,25 +51,37 @@
 
 		function leftArrowPressed() {
 			var element = document.getElementById("player");
-		    	element.style.left = parseInt(element.style.left) - 5 + 'px';
+			var newLeft = parseInt(element.style.left) - 5;
+			if(newLeft > 0) {
+		    		element.style.left = newLeft + 'px';
+			}
 			var didHeyListen = heyListen();
 		}
 
 		function rightArrowPressed() {
 			var element = document.getElementById("player");
-			element.style.left = parseInt(element.style.left) + 5 + 'px';
+			var newLeft = parseInt(element.style.left) + 5;
+			if(newLeft + parseInt(element.style.width) < window.innerWidth) {
+				element.style.left = newLeft + 'px';
+			}
 			heyListen();
 		}
 
 		function upArrowPressed() {
 			var element = document.getElementById("player");
-			element.style.top = parseInt(element.style.top) - 5 + 'px';
+			var newTop = parseInt(element.style.top) - 5;
+			if(newTop > 0) {
+				element.style.top = newTop + 'px';
+			}
 			heyListen();
 		}
 
 		function downArrowPressed() {
 			var element = document.getElementById("player");
-			element.style.top = parseInt(element.style.top) + 5 + 'px';
+			var newTop = parseInt(element.style.top) + 5;
+			if(newTop + parseInt(element.style.height) < window.innerHeight) {
+				element.style.top = newTop + 'px';
+			}
 			heyListen();
 		}
 
@@ -96,24 +107,24 @@
 		}
 
 		function docReady() {
+			document.body.style.overflow = 'hidden';
+
 			window.addEventListener('keydown', moveSelection);
 			var element = document.getElementById("player");
 			element.style.top = (window.innerHeight / 2) + 'px';
-			element.style.left = (window.innerWidth / 2) + 'px';
+			element.style.left = (window.innerWidth - parseInt(element.style.width) - 10) + 'px';
 
 			resetHeyListen();
 			isHeyListening = false;
-			setChestPositions();
+			setChestPosition();
 
 			window.onresize = function() {
-				setChestPositions();
+				setChestPosition();
 			};
 		}
 
-		function setChestPositions() {
+		function setChestPosition() {
 			var chest = document.getElementById("chest1");
-			chest.style.top = (window.innerHeight / 2) + 'px';
-			var chest = document.getElementById("chest2");
 			chest.style.top = (window.innerHeight / 2) + 'px';
 		}
 	</script>
@@ -123,7 +134,6 @@
 	<h1 align="center" style="font-family: helvetica; margin-top: 20px;">Get the treasure!</h1>
 	<img id="player" src="link.gif" style="position: absolute; top: 0; left: 0; width: 70px; height: 70px;">
 	<img id="chest1" src="chest.png" style="position: absolute; top: 0; left: 10px; width: 70px; height: 70px;">
-	<img id="chest2" src="chest.png" style="position: absolute; top: 0; right: 10px; width: 70px; height: 70px;">
 </body>
 
 </html>
