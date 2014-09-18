@@ -5,6 +5,8 @@
 	<script type="text/javascript">
 		var heyListenCount = 0;
 		var isHeyListening = false;
+		var playerWidthProportion = 0;
+		var playerHeightProportion = 0;
 
 		function calcTreasureCloseness() {
 			var player = document.getElementById("player");
@@ -49,13 +51,20 @@
 			document.body.appendChild(navi);
 		}
 
+		function recalculatePositionProportions() {
+			var player = document.getElementById("player");
+			playerWidthProportion = parseInt(player.style.left) / window.innerWidth;
+			playerHeightProportion = parseInt(player.style.top) / window.innerHeight;
+		}
+
 		function leftArrowPressed() {
 			var element = document.getElementById("player");
 			var newLeft = parseInt(element.style.left) - 5;
 			if(newLeft > 0) {
 		    		element.style.left = newLeft + 'px';
+				recalculatePositionProportions();
 			}
-			var didHeyListen = heyListen();
+			heyListen();
 		}
 
 		function rightArrowPressed() {
@@ -63,6 +72,7 @@
 			var newLeft = parseInt(element.style.left) + 5;
 			if(newLeft + parseInt(element.style.width) < window.innerWidth) {
 				element.style.left = newLeft + 'px';
+				recalculatePositionProportions();
 			}
 			heyListen();
 		}
@@ -72,6 +82,7 @@
 			var newTop = parseInt(element.style.top) - 5;
 			if(newTop > 0) {
 				element.style.top = newTop + 'px';
+				recalculatePositionProportions();
 			}
 			heyListen();
 		}
@@ -81,6 +92,7 @@
 			var newTop = parseInt(element.style.top) + 5;
 			if(newTop + parseInt(element.style.height) < window.innerHeight) {
 				element.style.top = newTop + 'px';
+				recalculatePositionProportions();
 			}
 			heyListen();
 		}
@@ -110,9 +122,9 @@
 			document.body.style.overflow = 'hidden';
 
 			window.addEventListener('keydown', moveSelection);
-			var element = document.getElementById("player");
-			element.style.top = (window.innerHeight / 2) + 'px';
-			element.style.left = (window.innerWidth - parseInt(element.style.width) - 10) + 'px';
+			var player = document.getElementById("player");
+			player.style.top = (window.innerHeight / 2) + 'px';
+			player.style.left = (window.innerWidth - parseInt(player.style.width) - 10) + 'px';
 
 			resetHeyListen();
 			isHeyListening = false;
@@ -120,6 +132,11 @@
 
 			window.onresize = function() {
 				setChestPosition();
+
+				var player = document.getElementById("player");
+				player.style.left = Math.round(window.innerWidth * playerWidthProportion) + 'px';
+				player.style.top = Math.round(window.innerHeight * playerHeightProportion) + 'px';
+				
 			};
 		}
 
