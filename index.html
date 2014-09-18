@@ -48,6 +48,10 @@
 			navi.style.left = Math.round(Math.random() * window.innerWidth) + 'px';
 			navi.style.width = Math.round(Math.random() * 200) + 'px';
 			navi.style.height = navi.style.width;
+
+			var orientation = Math.round(Math.random() * 4) * 90;
+			navi.style.transform = "rotate(" + orientation + "deg)"
+
 			document.body.appendChild(navi);
 		}
 
