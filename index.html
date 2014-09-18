@@ -1,10 +1,129 @@
 <html>
 <head>
-  <title>Hey, listen!</title>
+	<title>Hey, listen!</title>
+
+	<script type="text/javascript">
+		var heyListenCount = 0;
+		var isHeyListening = false;
+
+		function calcTreasureCloseness() {
+			var player = document.getElementById("player");
+			var chest1 = document.getElementById("chest1");
+			var chest2 = document.getElementById("chest2");
+			var treasureCloseness = Math.min(Math.abs(parseInt(player.style.left) - parseInt(chest1.style.left)),
+							 Math.abs(parseInt(player.style.left) - parseInt(chest2.style.right)));
+			 return treasureCloseness / window.innerWidth / 2.0;
+		}
+
+		function resetHeyListen() {
+			var treasureCloseness = calcTreasureCloseness();
+
+			heyListenCount = Math.round(35 * treasureCloseness) + 1;
+			console.log(heyListenCount);
+
+			heyListenTimeout = 300 / treasureCloseness;
+			isHeyListening = true;
+			setTimeout(function() { isHeyListening = false; }, heyListenTimeout);
+		}
+
+		function heyListen() {
+			heyListenCount--;
+			if(heyListenCount < 0) {
+				resetHeyListen();			
+				
+				var treasureCloseness = calcTreasureCloseness();
+				var naviCount = (Math.round(Math.random() * 3) / treasureCloseness) + 2;
+				for(var i = 0; i < naviCount; i++) {
+					showNavi();
+				}
+			}
+		}
+
+		function showNavi() {
+			var navi = document.createElement("img");
+			navi.src = "navi.jpeg";
+			navi.style.position = "absolute";
+			navi.style.top = Math.round(Math.random() * window.innerHeight) + 'px';
+			navi.style.left = Math.round(Math.random() * window.innerWidth) + 'px';
+			navi.style.width = Math.round(Math.random() * 200) + 'px';
+			navi.style.height = navi.style.width;
+			document.body.appendChild(navi);
+		}
+
+		function leftArrowPressed() {
+			var element = document.getElementById("player");
+		    	element.style.left = parseInt(element.style.left) - 5 + 'px';
+			var didHeyListen = heyListen();
+		}
+
+		function rightArrowPressed() {
+			var element = document.getElementById("player");
+			element.style.left = parseInt(element.style.left) + 5 + 'px';
+			heyListen();
+		}
+
+		function upArrowPressed() {
+			var element = document.getElementById("player");
+			element.style.top = parseInt(element.style.top) - 5 + 'px';
+			heyListen();
+		}
+
+		function downArrowPressed() {
+			var element = document.getElementById("player");
+			element.style.top = parseInt(element.style.top) + 5 + 'px';
+			heyListen();
+		}
+
+		function moveSelection(evt) {
+			if(isHeyListening) {
+				return;
+			}
+
+			switch (evt.keyCode) {
+				case 37:
+					leftArrowPressed();
+					break;
+				case 39:
+					rightArrowPressed();
+					break;
+				case 38:
+					upArrowPressed();
+					break;
+				case 40:
+					downArrowPressed();
+					break;
+			}
+		}
+
+		function docReady() {
+			window.addEventListener('keydown', moveSelection);
+			var element = document.getElementById("player");
+			element.style.top = (window.innerHeight / 2) + 'px';
+			element.style.left = (window.innerWidth / 2) + 'px';
+
+			resetHeyListen();
+			isHeyListening = false;
+			setChestPositions();
+
+			window.onresize = function() {
+				setChestPositions();
+			};
+		}
+
+		function setChestPositions() {
+			var chest = document.getElementById("chest1");
+			chest.style.top = (window.innerHeight / 2) + 'px';
+			var chest = document.getElementById("chest2");
+			chest.style.top = (window.innerHeight / 2) + 'px';
+		}
+	</script>
 </head>
 
-<body>
-  <h1>Hello, world!</h1>
+<body onload="docReady()" onkeydown="" onkeyup="">
+	<h1 align="center" style="font-family: helvetica; margin-top: 20px;">Get the treasure!</h1>
+	<img id="player" src="link.gif" style="position: absolute; top: 0; left: 0; width: 70px; height: 70px;">
+	<img id="chest1" src="chest.png" style="position: absolute; top: 0; left: 10px; width: 70px; height: 70px;">
+	<img id="chest2" src="chest.png" style="position: absolute; top: 0; right: 10px; width: 70px; height: 70px;">
 </body>
 
 </html>
