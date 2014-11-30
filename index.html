@@ -7,6 +7,7 @@
 		var isHeyListening = false;
 		var playerWidthProportion = 0;
 		var playerHeightProportion = 0;
+		var hasPlayedHorn = false;
 
 		function calcTreasureCloseness() {
 			var player = document.getElementById("player");
@@ -17,7 +18,6 @@
 
 		function resetHeyListen() {
 			var treasureCloseness = calcTreasureCloseness();
-
 			heyListenCount = Math.round(35 * treasureCloseness) + 1;
 
 			heyListenTimeout = 300 / treasureCloseness;
@@ -61,7 +61,21 @@
 			playerHeightProportion = parseInt(player.style.top) / window.innerHeight;
 		}
 
+		function checkIfAtTreasure() {
+			var treasureCloseness = calcTreasureCloseness();
+			//console.log(treasureCloseness);
+			if (treasureCloseness<=0.04) {
+				if (!hasPlayedHorn) {
+					new Audio("party_horn.aif").play();
+					hasPlayedHorn=true;
+				};
+				document.getElementsByTagName("body")[0].style.backgroundImage="url('http://i361.photobucket.com/albums/oo54/crackysparkles/sparkles/09.gif')";
+				document.getElementById("chestText").removeAttribute("hidden");
+			}
+		}
+
 		function leftArrowPressed() {
+			checkIfAtTreasure();
 			var element = document.getElementById("player");
 			var newLeft = parseInt(element.style.left) - 5;
 			if(newLeft > 0) {
@@ -72,6 +86,7 @@
 		}
 
 		function rightArrowPressed() {
+			checkIfAtTreasure();
 			var element = document.getElementById("player");
 			var newLeft = parseInt(element.style.left) + 5;
 			if(newLeft + parseInt(element.style.width) < window.innerWidth) {
@@ -82,6 +97,7 @@
 		}
 
 		function upArrowPressed() {
+			checkIfAtTreasure();
 			var element = document.getElementById("player");
 			var newTop = parseInt(element.style.top) - 5;
 			if(newTop > 0) {
@@ -92,6 +108,7 @@
 		}
 
 		function downArrowPressed() {
+			checkIfAtTreasure();
 			var element = document.getElementById("player");
 			var newTop = parseInt(element.style.top) + 5;
 			if(newTop + parseInt(element.style.height) < window.innerHeight) {
@@ -144,7 +161,7 @@
 			};
 		}
 
-		function setChestPosition() {
+		function setChestPosition(){
 			var chest = document.getElementById("chest1");
 			chest.style.top = (window.innerHeight / 2) + 'px';
 		}
@@ -152,6 +169,7 @@
 </head>
 
 <body onload="docReady()" onkeydown="" onkeyup="">
+	<h1 hidden align="center" id="chestText" style="font-family: helvetica; margin-top: 20px; position:fixed;left:auto;top:34%;font-size:80px;z-index:4;">Wow, didn't think anyone would make it this far.<br>I hope you're proud of yourself.</h1>
 	<h1 align="center" style="font-family: helvetica; margin-top: 20px;">Get the treasure!</h1>
 	<h3 align="center" style="font-family: helvetica; margin-top: -10px;">Move with the arrow keys.</h3>
 	<img id="player" src="link.gif" style="position: absolute; top: 0; left: 0; width: 70px; height: 70px;">
