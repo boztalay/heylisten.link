@@ -1,7 +1,18 @@
 <html>
 <head>
 	<title>Hey, listen!</title>
+	<style type="text/css">
+	#player{
+		
+	}
 
+	#controls{
+		-webkit-transition: all 2s ease-out;
+  		-moz-transition: all 2s ease-out;
+  		-o-transition: all 2s ease-out;
+  		-ms-transition: all 2s ease-out;
+	}
+	</style>
 	<script type="text/javascript">
 		var heyListenCount = 0;
 		var isHeyListening = false;
@@ -69,12 +80,14 @@
 					new Audio("party_horn.aif").play();
 					hasPlayedHorn=true;
 				};
+				document.getElementById("player").style.backgroundImage="url('http://i361.photobucket.com/albums/oo54/crackysparkles/sparkles/09.gif')";
 				document.getElementsByTagName("body")[0].style.backgroundImage="url('http://i361.photobucket.com/albums/oo54/crackysparkles/sparkles/09.gif')";
 				document.getElementById("chestText").removeAttribute("hidden");
 			}
 		}
 
 		function leftArrowPressed() {
+			document.getElementById("controls").style.color="white";
 			checkIfAtTreasure();
 			var element = document.getElementById("player");
 			var newLeft = parseInt(element.style.left) - 5;
@@ -86,6 +99,7 @@
 		}
 
 		function rightArrowPressed() {
+			document.getElementById("controls").style.color="white";
 			checkIfAtTreasure();
 			var element = document.getElementById("player");
 			var newLeft = parseInt(element.style.left) + 5;
@@ -97,6 +111,7 @@
 		}
 
 		function upArrowPressed() {
+			document.getElementById("controls").style.color="white";
 			checkIfAtTreasure();
 			var element = document.getElementById("player");
 			var newTop = parseInt(element.style.top) - 5;
@@ -108,6 +123,7 @@
 		}
 
 		function downArrowPressed() {
+			document.getElementById("controls").style.color="white";
 			checkIfAtTreasure();
 			var element = document.getElementById("player");
 			var newTop = parseInt(element.style.top) + 5;
@@ -171,7 +187,7 @@
 <body onload="docReady()" onkeydown="" onkeyup="">
 	<h1 hidden align="center" id="chestText" style="font-family: helvetica; margin-top: 20px; position:fixed;left:auto;top:34%;font-size:80px;z-index:4;">Wow, didn't think anyone would make it this far.<br>I hope you're proud of yourself.</h1>
 	<h1 align="center" style="font-family: helvetica; margin-top: 20px;">Get the treasure!</h1>
-	<h3 align="center" style="font-family: helvetica; margin-top: -10px;">Move with the arrow keys.</h3>
+	<h3  id="controls" align="center" style="font-family: helvetica; margin-top: -10px;">Move with the arrow keys.</h3>
 	<img id="player" src="link.gif" style="position: absolute; top: 0; left: 0; width: 70px; height: 70px;">
 	<img id="chest1" src="chest.png" style="position: absolute; top: 0; left: 10px; width: 70px; height: 70px;z-index:-1;">
 </body>
